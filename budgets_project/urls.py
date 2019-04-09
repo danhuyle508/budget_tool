@@ -20,10 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', home_view, name='home'),
     path('admin/', admin.site.urls),
     path('accounts/', include('django_registration.backends.activation.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', home_view, name='home'),
     path('budgets/', include('budgets.urls')),
 ]
 

@@ -8,14 +8,25 @@ from django.utils import timezone
 class Budget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='budgets')
     name = models.CharField(max_length=180, default='Untitled')
-    total_budget = models.FloatField()
+    total_amount = models.FloatField()
 
 class Transaction(models.Model):
-    budget = models.ForeignKey(Budget,models.CharField(max_length=180, default='Untitled')
+    budget = models.ForeignKey(Budget,models.CharField(max_length=180, default='Untitled'))
+    title = models.CharField(max_length=180, default='Untitled')
     amount = models.FloatField()
     description = models.CharField(max_length=1024, default='Empty')
-    CHOICES = {
-        (withdrawal, Withdrawal),
-        (deposit, Deposit)
-
+    STATES = {
+        ('Withdrawal', 'withdrawal'),
+        ('Deposit', 'deposit'),
     } 
+    status = models.CharField(
+        max_length=16,
+        choices=STATES,
+        default='withdrawal'
+    )
+
+    def __repr__(self):
+        return '<Card: {} | {}>'.format(self.title, self.status)
+
+    def __str__(self):
+        return '{} | {}'.format(self.title, self.status)
