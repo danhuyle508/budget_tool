@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 def home_view(request):
-    context = {
-        'message': 'Hello world.'
+    context={
+        'message':'hello'
     }
-    return render(request, 'generic/home.html', context)
+    return render(request, 'generic/home.html',context)
