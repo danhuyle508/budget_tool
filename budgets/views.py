@@ -3,11 +3,10 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView
-from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy    
 from .models import Budget, Transaction
-
-
+from .forms import BudgetForm,TransactionForm
 
 class BudgetView(LoginRequiredMixin,ListView):
     template_name = 'budgets/budget_list.html'
@@ -17,19 +16,18 @@ class BudgetView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Budget.objects.filter(user__username=self.request.user.username)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['transactions'] = Transaction.objects.filter(category__user__username=self.request.user.username)
-        return context  
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['transactions'] = Budget.objects.filter(budget__user__username=self.request.user.username)
+    #     return context  
+
+
 class TransactionView(LoginRequiredMixin, DetailView):
     template_name = 'board/transaction_detail.html'
     model = Transaction
     context_object_name = 'transaction'
     login_url = reverse_lazy('login')
     pk_url_kwarg = 'id'
-
-    def get_queryset(self):
-        return Transaction.objects.filter(category__user__username=self.request.user.username)  
 
 class BudgetCreateView(LoginRequiredMixin, CreateView):
     template_name = 'budgets/budget_create.html'
@@ -43,10 +41,10 @@ class BudgetCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class BudgetCreateView(LoginRequiredMixin, CreateView):
+class TransactionCreateView(LoginRequiredMixin, CreateView):
     template_name = 'budgets/transaction_create.html'
     model = Transaction
-    form_class = CardForm
+    form_class = TransactionForm
     success_url = reverse_lazy('transaction_view')
     login_url = reverse_lazy('auth_login')
 
