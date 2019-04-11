@@ -5,3 +5,4 @@ def home_view(request):
         'message':'hello'
     }
     return render(request, 'generic/home.html',context)
+    
